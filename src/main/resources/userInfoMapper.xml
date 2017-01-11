@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--命名空间应该是对应接口的包名+类名 -->
+<mapper namespace="com.feng.lan.dao.IUserInfoDao">
+	<resultMap type="com.feng.lan.entities.vo.‘" id="userInfo">    
+    <id column="id" property="id"/>    
+    <result column="user_name" property="userName"/>  
+    <result column="password" property="password"/>    
+    </resultMap> 
+       
+  <!--id应该是接口中的方法，结果类型如没有配置别名则应该使用全名称 -->
+  <select id="getUserInfo" resultMap="userInfo">
+    select user_name,password from userinfo where 
+    <if test ="userName != null"> user_name = #{userName}</if> 
+    <if test = "password != null"> and password = #{password}</if>
+  </select>
+  <select id="getAllUserInfo" resultMap="userInfo">
+  	select user_name,password from userinfo
+  </select>
+  <!--执行增加操作的SQL语句。id和parameterType分别与IUserInfoDao接口中的insertUserInfo方法的名字和参数类型一致。
+    useGeneratedKeys设置为"true"表明要MyBatis获取由数据库自动生成的主键；keyProperty="id"指定把获取到的主键值注入到User的id属性--> 
+  <insert id="insertUserInfo" parameterType="com.feng.lan.entities.vo.UserInfo" useGeneratedKeys="true" keyProperty="id">
+  	insert into userinfo(user_name,password) values(#{name},#{password})
+  </insert>
+  <delete id="deleteUserInfo" parameterType="com.feng.lan.entities.vo.UserInfo">
+  	delete from userinfo where <if test ="userName != null"> id = #{id}</if> 
+  </delete>
+  <update id="updateUserInfo" parameterType="com.feng.lan.entities.vo.UserInfo">
+  	update userinfo 
+  	set <if test ="userName != null"> user_name = #{userName}</if> 
+  		<if test = "password != null"> ,password = #{password}</if>
+  	where <if test ="userName != null"> id = #{id}</if> 
+  						
+  </update>
+</mapper>
